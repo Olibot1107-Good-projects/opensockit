@@ -1,7 +1,7 @@
 import io from "https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.esm.min.js";
 
 class opensockit {
-  constructor(url = window.location.origin) {
+  constructor(url = 'https://opensockit.onrender.com') {
     this.url = url;
     this.socket = null;
     this.token = null;
