@@ -15,16 +15,31 @@ console.log('Connected!');
 ## Send Messages
 
 ```javascript
-// Send a message to all other connected clients on your domain
+// Send a message with default 'message' event
 sockit.send('Hello, world!');
+
+// Send a custom event
+sockit.send('customEvent', 'Hello, world!');
 ```
 
 ## Receive Messages
 
 ```javascript
-// Listen for incoming messages
+// Listen for specific events
 sockit.getSocket().on('message', (msg) => {
   console.log('Received:', msg);
+});
+
+// Listen for custom events
+sockit.getSocket().on('customEvent', (data) => {
+  console.log('Received custom:', data);
+});
+
+// Listen for any event except 'token'
+sockit.getSocket().onAny((event, ...args) => {
+  if (event !== 'token') {
+    console.log(`Received ${event}:`, ...args);
+  }
 });
 ```
 
@@ -64,8 +79,8 @@ sockit.getSocket().on('message', (msg) => {
 
 - `new opensockit(url)` - Create instance (optional server URL)
 - `connect()` - Connect to server (Promise)
-- `send(message)` - Send message to other clients on same domain
+- `send(event = 'message', data)` - Send data to other clients on same domain with specified event (any event except 'token')
 - `getSocket()` - Get Socket.IO socket for advanced usage
 - `disconnect()` - Disconnect from server
 
-Messages are automatically isolated by domain - only clients from the same website can communicate.
+Messages are automatically isolated by domain - only clients from the same website can communicate. You can send and receive any socket event except 'token'.

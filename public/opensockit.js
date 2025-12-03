@@ -38,9 +38,9 @@ class opensockit {
     return this.socket;
   }
 
-  send(message) {
+  send(event = 'message', data) {
     if (this.socket) {
-      this.socket.emit('message', message);
+      this.socket.emit(event, data);
     }
   }
 }

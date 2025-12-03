@@ -8,6 +8,7 @@
 <body>
     <h1>OpenSockit Test</h1>
     <div id="status">Connecting...</div>
+    <input type="text" id="eventInput" placeholder="Event type" value="message">
     <input type="text" id="messageInput" placeholder="Type a message">
     <button onclick="sendMessage()">Send</button>
     <div id="messages"></div>
@@ -16,17 +17,20 @@
         const sockit = new opensockit();
         sockit.connect().then(() => {
             document.getElementById('status').textContent = 'Connected!';
-            sockit.getSocket().on('message', (msg) => {
-                const div = document.getElementById('messages');
-                div.innerHTML += '<p>Received: ' + msg + '</p>';
+            sockit.getSocket().onAny((event, ...args) => {
+                if (event !== 'token') {
+                    const div = document.getElementById('messages');
+                    div.innerHTML += `<p>Received ${event}: ${JSON.stringify(args)}</p>`;
+                }
             });
         }).catch((error) => {
             document.getElementById('status').textContent = 'Connection failed: ' + error.message;
         });
 
         window.sendMessage = () => {
+            const event = document.getElementById('eventInput').value;
             const msg = document.getElementById('messageInput').value;
-            sockit.send(msg);
+            sockit.send(event, msg);
             document.getElementById('messageInput').value = '';
         };
     </script>

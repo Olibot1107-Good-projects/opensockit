@@ -94,12 +94,14 @@ io.on("connection", (socket) => {
     }
   }, 10000);
 
-  socket.on('message', (msg) => {
-    io.sockets.sockets.forEach((s) => {
-      if (s.domain === socket.domain && s !== socket) {
-        s.emit('message', msg);
-      }
-    });
+  socket.onAny((event, ...args) => {
+    if (event !== 'token') {
+      io.sockets.sockets.forEach((s) => {
+        if (s.domain === socket.domain && s !== socket) {
+          s.emit(event, ...args);
+        }
+      });
+    }
   });
 });
 
