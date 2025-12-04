@@ -58,7 +58,7 @@ app.get("/token", (req, res) => {
     console.log("User is requesting token");
     const token = rtoken.makeLongRandomString();
     res.send(token);
-    console.log(`Sent token (${token})`);
+    console.log(`Sent token`);
     users.push({ token: `${token}`, time: 20, domain: `${domain}` });
     console.log("Pushed Token to users array");
 });
